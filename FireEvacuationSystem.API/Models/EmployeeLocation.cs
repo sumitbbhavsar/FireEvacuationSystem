@@ -8,10 +8,10 @@ public class EmployeeLocation
     /// <summary>
     /// Get or sets X
     /// </summary>
-    public int X { get; set; }
+    public decimal X { get; set; }
 
     /// <summary>
     /// Get or sets Y
     /// </summary>
-    public int Y { get; set; }
+    public decimal Y { get; set; }
 }

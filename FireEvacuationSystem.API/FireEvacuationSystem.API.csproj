@@ -12,6 +12,7 @@
     <DocumentationFile>bin\Debug\netcoreapp2.2\FireEvacuationSystem.API.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Dapper" Version="1.60.9" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
