@@ -35,6 +35,10 @@ namespace FireEvacuationSystem.API
             AppSettings.DbConnectionString = Configuration.GetValue<string>("AppSettings:DbConnectionString"); 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddCors(c =>  
+            {  
+                c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());  
+            });
 
           services.AddSwaggerGen(c =>
         {
@@ -69,7 +73,9 @@ namespace FireEvacuationSystem.API
             }
 
             app.UseHttpsRedirection();
+            app.UseCors(options => options.AllowAnyOrigin()); 
             app.UseMvc();
+            
            app.UseSwagger();
         
         //This line enables Swagger UI, which provides us with a nice, simple UI with which we can view our API calls.
