@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-
+import {CommonService} from './service/common.service';
 @Component({
   selector: 'my-app',
   templateUrl: './app.component.html',
   styleUrls: [ './app.component.css' ]
 })
 export class AppComponent implements OnInit  {
+  employees:any;
   name = 'Angular';
 title = 'Block(10*10)';
 type='BubbleChart';//Scatter
@@ -20,15 +21,16 @@ type='BubbleChart';//Scatter
       // ["Test", -1, -18],
 ];
 
-constructor(){
+constructor(private cs: CommonService){
   // this.data = this.getCoordinateValue();
 // setTimeout(this.getCoordinateValue(), 5000);
 // this.timeout()
- this.getCoordinateValue();
+ // this.getCoordinateValue();
 }      
 
 ngOnInit(){
-      setInterval(() => this.getCoordinateValue(),2000);
+      setInterval(() => this.getEmployee(),2000);
+      this.getEmployee();
   }
 
 getCoordinateValue(){
@@ -45,6 +47,20 @@ getCoordinateValue(){
   this.data = array;
    // console.log(this.data);
    }
+
+   getEmployee(){
+    var array = [];
+    this.cs.getEmployee().subscribe(data=>{
+      let emp : any = data;
+    for(let i=0; i< emp.length; i++){
+      array.push([
+        emp[i].employeeName, emp[i].x, emp[i].y
+      ]);
+    }
+    this.data = array;
+    console.log(this.data);  
+    });
+  }
 
 //  timeout() {
 //       var that = this;
@@ -65,8 +81,8 @@ columnNames = ['Name', 'EmpId','Signal Strength'];
 //    colors: ['#e0440e', '#e6693e', '#ec8f6e', '#f3b49f', '#f6c7b6'], is3D: true, 
 // };
   options = {
-    vAxis: {viewWindow: {min: 0, max: 10}, format: "#", gridlines: {count: 10}},
-    hAxis: {viewWindow: {min: 0, max: 10}, format: "#", gridlines: {count: 10}}
+    vAxis: {viewWindow: {min: 0, max: 20}, format: "#", gridlines: {count: 20}},
+    hAxis: {viewWindow: {min: 0, max: 20}, format: "#", gridlines: {count: 20}}
     
          };
    width = 1050;
