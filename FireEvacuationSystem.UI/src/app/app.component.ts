@@ -81,8 +81,8 @@ columnNames = ['Name', 'X','Y'];
 //    colors: ['#e0440e', '#e6693e', '#ec8f6e', '#f3b49f', '#f6c7b6'], is3D: true, 
 // };
   options = {
-    vAxis: {viewWindow: {min: 0, max: 20}, format: "#", gridlines: {count: 10}},
-    hAxis: {viewWindow: {min: 0, max: 20}, format: "#", gridlines: {count: 10}}
+    vAxis: {viewWindow: {min: 0, max: 10}, format: "#", gridlines: {count: 10}},
+    hAxis: {viewWindow: {min: 0, max: 10}, format: "#", gridlines: {count: 10}}
     
          };
    width = 1050;
