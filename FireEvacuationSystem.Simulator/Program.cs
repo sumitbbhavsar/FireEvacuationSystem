@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
+using System.Threading;
+// using System.Net.Http.Formatting;
 namespace DataPusherApp
 {
     #region Program class
@@ -17,46 +21,104 @@ namespace DataPusherApp
             double[] freqInMHz  = new double[]{2412,2412,2412}; //mHz from DB values
 
             var jsonData = System.IO.File.ReadAllText(@"D:/Users/akchavda/OneDrive - Capgemini\DataPusherApp/data/EmployeeSignalStrength.json");
-            EmployeeList empList = JsonConvert.DeserializeObject<EmployeeList>(jsonData);
+            
+            List<Employee> empList = JsonConvert.DeserializeObject<List<Employee>>(jsonData);
 
-            #region looping through each employee and getting x & y from signal strength
-            foreach (var employeeItem in empList.lstEmployee)
+            
+            for (int i = 0; i < empList.Count; i++)
             {
-                double[] SignalStrengthInDb = new double[]{employeeItem.SignalStrength1,employeeItem.SignalStrength2,employeeItem.SignalStrength3};
-                double[] radii = new double[]{0,0,0};
-                for(int i = 0; i < NoOfRouters; i++)
-                {
-                    double exp = (27.55 - (20 * Math.Log10(freqInMHz[i])) + Math.Abs(SignalStrengthInDb[i])) / 20.0;
-                    double d = (double) Math.Pow(10.0, exp);
-                    radii[i] = Math.Round(d,1); //add value to radii array
-                }
-                
-                double[] EmpLocation = GetEmpLocationByRadii(radii);
-                // using (var client = new HttpClient())
-                // {
-                //     client.BaseAddress = new Uri("http://localhost:60464/api/");
-                //     //HTTP GET
-                //     var responseTask = client.GetAsync("student");
-                //     responseTask.Wait();
-
-                //     var result = responseTask.Result;
-                //     if (result.IsSuccessStatusCode)
-                //     {
-
-                //         var readTask = result.Content.ReadAsAsync<Student[]>();
-                //         readTask.Wait();
-
-                //         var students = readTask.Result;
-
-                //         foreach (var student in students)
-                //         {
-                //             Console.WriteLine(student.Name);
-                //         }
-                //     }
-                // }
+                empList[i].s1List=empList[i].SignalStrength1.Split(",").ToList();
+                empList[i].s2List=empList[i].SignalStrength2.Split(",").ToList();
+                empList[i].s3List=empList[i].SignalStrength3.Split(",").ToList();                            
             }
-            #endregion
-        }
+
+            
+                for (int j=0; j < empList[0].s1List.Count;j++)
+                {
+                    for (int emp=0; emp < empList.Count;emp++)
+                    {
+                     double s1=Convert.ToDouble(empList[emp].s1List[j]);
+                     double s2=Convert.ToDouble(empList[emp].s2List[j]);
+                     double s3=Convert.ToDouble(empList[emp].s3List[j]);
+                     int  empId=(empList[emp].EmpID);
+
+                    double[] SignalStrengthInDb = new double[]{s1,s2,s3};
+                    double[] radii = new double[]{0,0,0};
+                    for(int i = 0; i < NoOfRouters; i++)
+                    {
+                        double exp = (27.55 - (20 * Math.Log10(freqInMHz[i])) + Math.Abs(SignalStrengthInDb[i])) / 20.0;
+                        double d = (double) Math.Pow(10.0, exp);
+                        radii[i] = Math.Round(d,1); //add value to radii array
+                    }
+                    
+                    double[] EmpLocation = GetEmpLocationByRadii(radii);
+                    
+                    using (HttpClient client = new HttpClient())
+                    {
+                        
+                        EmployeeRoutesRequest request =  new  EmployeeRoutesRequest();
+                        request.X=EmpLocation[0];
+                        request.Y=EmpLocation[1];
+                        request.EmployeeId=empId;
+                        request.NearByRouteId=8;
+                        StringContent content = new StringContent (JsonConvert.SerializeObject(request),Encoding.UTF8,"application/json");
+                        
+
+                        HttpResponseMessage response =  client.PostAsync("http://localhost:5000/api/EmployeeRoutes", content).Result;
+
+                        if(response.IsSuccessStatusCode)
+                        {
+                            Console.WriteLine("API called " + response.StatusCode)   ;
+                        }
+                    }
+                    System.Threading.Thread.Sleep(2000);
+                }
+
+                    }
+                }
+
+            
+            // #region looping through each employee and getting x & y from signal strength
+            // foreach (var employeeItem in empList)
+            // {
+            //     for (int j = 0; j < employeeItem.SignalStrength1.Split(",").Length; j++)
+            //     {
+                    
+            //         double[] SignalStrengthInDb = new double[]{employeeItem.SignalStrength1[j],employeeItem.SignalStrength2[j],employeeItem.SignalStrength3[j]};
+            //         double[] radii = new double[]{0,0,0};
+            //         for(int i = 0; i < NoOfRouters; i++)
+            //         {
+            //             double exp = (27.55 - (20 * Math.Log10(freqInMHz[i])) + Math.Abs(SignalStrengthInDb[i])) / 20.0;
+            //             double d = (double) Math.Pow(10.0, exp);
+            //             radii[i] = Math.Round(d,1); //add value to radii array
+            //         }
+                    
+            //         double[] EmpLocation = GetEmpLocationByRadii(radii);
+
+            //         using (HttpClient client = new HttpClient())
+            //         {
+                        
+            //             EmployeeRoutesRequest request =  new  EmployeeRoutesRequest();
+            //             request.X=EmpLocation[0];
+            //             request.Y=EmpLocation[1];
+            //             request.EmployeeId=employeeItem.EmpID;
+            //             request.NearByRouteId=8;
+            //             StringContent content = new StringContent (JsonConvert.SerializeObject(request),Encoding.UTF8,"application/json");
+                        
+
+            //             HttpResponseMessage response =  client.PostAsync("http://localhost:5000/api/EmployeeRoutes", content).Result;
+
+            //             if(response.IsSuccessStatusCode)
+            //             {
+            //                 Console.WriteLine("API called " + response.StatusCode)   ;
+            //             }
+            //         }
+            //         System.Threading.Thread.Sleep(2000);
+            //     }
+               
+            // }
+            // #endregion
+        //  }
          #endregion
         
         #region get x & y of location
@@ -97,10 +159,14 @@ namespace DataPusherApp
     #region Employee Class
     public class  Employee{
         public int EmpID { get; set; }
-        public double SignalStrength1 { get; set; }
-        public double SignalStrength2 { get; set; }
-        public double SignalStrength3 { get; set; }
+        public string SignalStrength1 { get; set; }
+        public string SignalStrength2 { get; set; }
+        public string SignalStrength3 { get; set; }  
+        public List<string> s1List {get;set;}
+        public List<string> s2List {get;set;}
+        public List<string> s3List {get;set;}
     }
+
     #endregion
 
     #region EmployeeRoutesRequest
