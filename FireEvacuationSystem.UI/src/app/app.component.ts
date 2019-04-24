@@ -73,7 +73,7 @@ getCoordinateValue(){
 
 // columnNames = ['Browser', 'Percentage'];
 
-columnNames = ['Name', 'EmpId','Signal Strength'];
+columnNames = ['Name', 'X','Y'];
 
 // columnNames = ['Name',{'Id':'number'}, 'Weight'];
 
@@ -81,8 +81,8 @@ columnNames = ['Name', 'EmpId','Signal Strength'];
 //    colors: ['#e0440e', '#e6693e', '#ec8f6e', '#f3b49f', '#f6c7b6'], is3D: true, 
 // };
   options = {
-    vAxis: {viewWindow: {min: 0, max: 20}, format: "#", gridlines: {count: 20}},
-    hAxis: {viewWindow: {min: 0, max: 20}, format: "#", gridlines: {count: 20}}
+    vAxis: {viewWindow: {min: 0, max: 20}, format: "#", gridlines: {count: 10}},
+    hAxis: {viewWindow: {min: 0, max: 20}, format: "#", gridlines: {count: 10}}
     
          };
    width = 1050;
