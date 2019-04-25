@@ -8,7 +8,7 @@ import {CommonService} from './service/common.service';
 export class AppComponent implements OnInit  {
   employees:any;
   name = 'Angular';
-title = 'Block(10*10)';
+title = 'Block(100*100)';
 type='BubbleChart';//Scatter
   data = [
       // ["Dipak", 8, 12],
@@ -29,7 +29,7 @@ constructor(private cs: CommonService){
 }      
 
 ngOnInit(){
-      setInterval(() => this.getEmployee(),2000);
+      setInterval(() => this.getEmployee(),1000);
       this.getEmployee();
   }
 
@@ -45,7 +45,6 @@ getCoordinateValue(){
     ]);
 	}
   this.data = array;
-   // console.log(this.data);
    }
 
    getEmployee(){
@@ -62,29 +61,17 @@ getCoordinateValue(){
     });
   }
 
-//  timeout() {
-//       var that = this;
-//       setTimeout(function () {
-//           console.log('Test');
-//           // this.data = this.getCoordinateValue();
-//            that.timeout();
-//       }, 5000);
-//   }
-
-// columnNames = ['Browser', 'Percentage'];
 
 columnNames = ['Name', 'X','Y'];
-
-// columnNames = ['Name',{'Id':'number'}, 'Weight'];
 
 // options = {
 //    colors: ['#e0440e', '#e6693e', '#ec8f6e', '#f3b49f', '#f6c7b6'], is3D: true, 
 // };
   options = {
-    vAxis: {viewWindow: {min: 0, max: 10}, format: "#", gridlines: {count: 10}},
-    hAxis: {viewWindow: {min: 0, max: 10}, format: "#", gridlines: {count: 10}}
-    
+    vAxis: {viewWindow: {min: 0, max: 100}, format: "#", gridlines: {count: 5}},
+    hAxis: {viewWindow: {min: 0, max: 100}, format: "#", gridlines: {count: 5}},
+     chartArea:{backgroundColor: '#fdc', width:1200, height:600},
          };
-   width = 1050;
-   height = 800;
+   width = 1400;
+   height = 700;
 }
