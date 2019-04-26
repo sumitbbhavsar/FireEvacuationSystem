@@ -29,7 +29,7 @@ constructor(private cs: CommonService){
 }      
 
 ngOnInit(){
-      setInterval(() => this.getEmployee(),1000);
+      setInterval(() => this.getEmployee(),500);
       this.getEmployee();
   }
 
@@ -70,7 +70,7 @@ columnNames = ['Name', 'X','Y'];
   options = {
     vAxis: {viewWindow: {min: 0, max: 100}, format: "#", gridlines: {count: 5}},
     hAxis: {viewWindow: {min: 0, max: 100}, format: "#", gridlines: {count: 5}},
-     chartArea:{ width:1200, height:600},
+     chartArea:{ width:1200, height:600}
          };
    width = 1400;
    height = 700;
